@@ -31,7 +31,7 @@ install_slack_cli() {
                                 fi
 
                                 slack_cli_name="slack-dev"
-                                if [ $# -gt 0 ]; then
+                                if [ $# -gt 1 ]; then
                                         shift $(($OPTIND - 1))
                                         slack_cli_name=${1}
                                 fi
