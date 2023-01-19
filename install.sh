@@ -14,13 +14,13 @@ install_slack_cli() {
                 echo -e "✅ $slack_cli_name command is found in the system. Now check if it's Slack CLI command\n"
                 
                 # Check if command is used for Slack CLI, adding version check to make sure this change is backwards compatible
-                if [ -x "$(command -v `$slack_cli_name _fingerprint`)" ]; then
-                        if [ ! $($slack_cli_name _fingerprint) == $FINGERPRINT ] ; then
+                if [[ -x "$(command -v `$slack_cli_name _fingerprint`)" ]]; then
+                        if [[ ! $($slack_cli_name _fingerprint) == $FINGERPRINT ]] ; then
                                 echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
                                 exit 1
                         fi
-                elif [  -x "$(command -v `$slack_cli_name --version`)" ]; then
-                        if [ ! $($slack_cli_name --version) == *"Using "* ]; then
+                elif [[  -x "$(command -v `$slack_cli_name --version`)" ]]; then
+                        if [[ ! $($slack_cli_name --version) == *"Using "* ]]; then
                                 echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
                                 exit 1
                         fi
