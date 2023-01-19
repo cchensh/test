@@ -20,6 +20,7 @@ install_slack_cli() {
                                 exit 1
                         else
                                 echo "🔥 Slack CLI is found, we will upgrade your Slack CLI to the latest version"
+                        fi
                 else
                         echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
                         exit 1
