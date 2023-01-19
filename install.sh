@@ -4,17 +4,20 @@ MIN_DENO_VERSION="1.20.6"
 
 install_slack_cli() {
         FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e"    
+        slack_cli_name="slack"
+        if [ $# -gt 0 ]; then
+                slack_cli_name=${1}
+        fi
 
         # Check if slack command is already in user's system
-        if [ -x "$(command -v slack)" ]; then
-                echo -e "✓ Slack command is found in the system\n"
-                echo -e "  Check if it's Slack CLI command\n"
+        if [ -x "$(command -v $slack_cli_name)" ]; then
+                echo -e "✅ $slack_cli_name command is found in the system. Now check if it's Slack CLI command\n"
                 
-                # Check if `slack` command is used for Slack CLI, adding version check to make sure this change is backwards compatible
-                if ([ -x "$(command -v `slack _fingerprint`)" ] && [ $(slack _fingerprint) == $FINGERPRINT ]) || ([ -x "$(command -v `slack --version`)" ] && [ $(slack --version) == *"Using "* ]) ; then
-                        echo "Slack CLI is found, we will upgrade your Slack CLI to the latest version"
+                # Check if command is used for Slack CLI, adding version check to make sure this change is backwards compatible
+                if ([ -x "$(command -v `$slack_cli_name _fingerprint`)" ] && [ $($slack_cli_name _fingerprint) == $FINGERPRINT ]) || ([ -x "$(command -v `$slack_cli_name --version`)" ] && [ $($slack_cli_name --version) == *"Using "* ]) ; then
+                        echo "🔥 Slack CLI is found, we will upgrade your Slack CLI to the latest version"
                 else
-                        echo -e "✋ We found another 'slack' command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
+                        echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
                         exit 1
                 fi
         fi
@@ -47,10 +50,6 @@ install_slack_cli() {
                 exit 1
         fi
 
-        slack_cli_name="slack"
-        if [ $# -gt 0 ]; then
-                slack_cli_name=${1}
-        fi
         slack_cli_install_dir="$HOME/.slack"
         slack_cli_install_bin_dir="$slack_cli_install_dir/bin"
         slack_cli_bin_path="$slack_cli_install_bin_dir/slack"
