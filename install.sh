@@ -4,22 +4,23 @@ MIN_DENO_VERSION="1.20.6"
 
 install_slack_cli() {
         FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e"    
+
         slack_cli_name="slack"
         if [ $# -gt 0 ]; then
                 slack_cli_name=${1}
         fi
 
         # Check if slack command is already in user's system
-        if [ -x "$(command -v $slack_cli_name)" ]; then
+        if [ -x "$(command -v $slack_cli_name)" ] ; then
                 echo -e "✅ $slack_cli_name command is found in the system. Now check if it's Slack CLI command\n"
                 
                 # Check if command is used for Slack CLI, adding version check to make sure this change is backwards compatible
-                if [[ -x "$(command -v `$slack_cli_name _fingerprint`)" ]]; then
+                if $slack_cli_name _fingerprint ; then
                         if [[ ! $($slack_cli_name _fingerprint) == $FINGERPRINT ]] ; then
                                 echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
                                 exit 1
                         fi
-                elif [[  -x "$(command -v `$slack_cli_name --version`)" ]]; then
+                elif $slack_cli_name --version ; then
                         if [[ ! $($slack_cli_name --version) == *"Using "* ]]; then
                                 echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
                                 exit 1
