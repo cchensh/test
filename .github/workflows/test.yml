@@ -1,0 +1,14 @@
+name: Test pipeline
+
+on: [push]
+
+jobs:
+  deploy:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Slack CLI
+        run: curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash
+      - name: Check
+        run: slack --version
