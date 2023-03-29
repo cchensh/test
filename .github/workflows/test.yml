@@ -10,5 +10,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install Slack CLI
         run: curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash
-      - name: Check
+      - name: Check slack cli version
         run: slack --version
+      - name: Try Slack CLI login
+        run: slack auth login
+        
