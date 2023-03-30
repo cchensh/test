@@ -13,7 +13,7 @@ jobs:
       - name: Check slack cli version
         run: slack --version
       - name: Try Slack CLI login
-        run: slack login --auth "xoxe.xoxp-1-Mi0yLTMyOTAyMzE1ODM3OTctMzkxODI2MjYxMDc1NC00MDM2NzQwMzgxOTIwLTUwMzU4OTcyMTQ4ODUtMzVkYTY4NGUyY2VmOGUxYmFiMmJjOGM4NzJmNTcxNTI1ZjQyM2Q0NjI3MmI4ZWUwMDgxZjllZWM4M2FiYWFlYg"
+        run: slack login --auth "xoxe.xoxp-1-Mi0yLTMyOTAyMzE1ODM3OTctMzkxODI2MjYxMDc1NC00MDM2NzQwMzgxOTIwLTUwNjI1MjkyODYyNTYtNDVmODkzNGE2ZjNkYmYxOWY1OGE1NmVmYWIyNmJjODhkMTNjNDgzNjY0NWQ5YjcxMmE1ZWE3NGFmOTRhZjIyYg"
       - name: Check credentials.json
         run: locate credentials.json
       
