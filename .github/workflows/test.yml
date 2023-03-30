@@ -13,7 +13,9 @@ jobs:
       - name: Check slack cli version
         run: slack --version
       - name: Try Slack CLI login
-        run: slack login --auth "xoxe.xoxp-1-Mi0yLTMyOTAyMzE1ODM3OTctMzkxODI2MjYxMDc1NC00MDM2NzQwMzgxOTIwLTUwMzg5ODQzNTU2NTAtYmVlYTdmMzU1NjBlMGZhYWJiYzUxZTM5YTUyY2E0Y2ZiODc2ODBjMWM1M2Y0YTUzYTIzZWUxMWM2MmM4NTgzZg"
+        env:
+          SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
+        run: slack login --auth "$env:SUPER_SECRET"
       - name: Check credentials.json
         run: locate credentials.json
       
