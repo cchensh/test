@@ -17,5 +17,5 @@ jobs:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
         run: slack login --auth "${{ secrets.SLACK_TOKEN }}"
       - name: Check credentials.json
-        run: locate credentials.json
+        run: find credentials.json
       
