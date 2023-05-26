@@ -15,7 +15,7 @@ jobs:
       - name: Try Slack CLI login
         env:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
-        run: slack login --auth "${{ secrets.SLACK_TOKEN }}"
+        run: slack-dev login --auth "${{ secrets.SLACK_TOKEN }}"
       # - name: Create an App from template for Demo purpose
       #   run: find credentials.json
       
