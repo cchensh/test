@@ -11,7 +11,7 @@ jobs:
       - name: Install Slack CLI
         run: curl -fsSL https://downloads.slack-edge.com/slack-cli/install-dev.sh | bash
       - name: Check slack cli version
-        run: slack --version
+        run: slack-dev --version
       - name: Try Slack CLI login
         env:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
