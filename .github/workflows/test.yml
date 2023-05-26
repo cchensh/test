@@ -23,9 +23,7 @@ jobs:
       - name: Basic Slack CLI commands with service token - create trigger
         run: > 
           cd my-app &&
-          slack-dev trigger create --trigger-def triggers/greeting_trigger.ts --token "${{ secrets.SLACK_TOKEN }}" &&
-          xdotool key --clearmodifiers Down &&
-          xdotool key --clearmodifiers Return 
+          ./test.sh
         shell: bash
       # - name: Basic Slack CLI commands with service token - deploy app
       #   run: cd my-app && slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
