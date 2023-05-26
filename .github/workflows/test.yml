@@ -16,6 +16,11 @@ jobs:
         env:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
         run: slack-dev login --auth "${{ secrets.SLACK_TOKEN }}"
-      # - name: Create an App from template for Demo purpose
-      #   run: find credentials.json
+      - name: Create an App from template for Demo purpose
+        run: slack-dev create my-app -t slack-samples/deno-hello-world 
+      - name: Basic Slack CLI commands with service token - deploy app
+        run: slack-dev deploy --token $SLACK_USER_TOKEN
+      - name: Basic Slack CLI commands with service token - create trigger
+        run: slack-dev deploy --token $SLACK_USER_TOKEN
+
       
