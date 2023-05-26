@@ -1,4 +1,4 @@
-name: Test pipeline
+name: Demo pipeline
 
 on: [push]
 
@@ -9,13 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Slack CLI
-        run: curl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash
+        run: curl -fsSL https://downloads.slack-edge.com/slack-cli/install-dev.sh | bash
       - name: Check slack cli version
         run: slack --version
       - name: Try Slack CLI login
         env:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
         run: slack login --auth "${{ secrets.SLACK_TOKEN }}"
-      - name: Check credentials.json
-        run: find credentials.json
+      # - name: Create an App from template for Demo purpose
+      #   run: find credentials.json
       
