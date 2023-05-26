@@ -17,14 +17,8 @@ jobs:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
         run: slack-dev login --auth "${{ secrets.SLACK_TOKEN }}"
       - name: Create an App from template for Demo purpose
-        run: slack-dev create my-app -t slack-samples/deno-hello-world 
-      - name: Start Slack CLI commands with the newly created workflow
+        run: slack-dev create my-app -t slack-samples/deno-reverse-string 
+      - name: Start Slack CLI commands with the newly created app
         run: cd my-app && ls -l
-      # - name: Basic Slack CLI commands with service token - create trigger
-      #   run: > 
-      #     cd my-app && slack-dev trigger create --trigger-def triggers/greeting_trigger.ts --token "${{ secrets.SLACK_TOKEN }}"
-
-      - name: Basic Slack CLI commands with service token - deploy app
-        run: cd my-app && slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
-
+      
       
