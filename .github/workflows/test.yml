@@ -23,6 +23,6 @@ jobs:
       - name: Start Slack CLI commands with the newly created app
         run: cd my-app && ls -l
       - name: Start Slack CLI commands with the newly created app
-        run: cd my-app && echo -ne '\n' | $(slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}")
+        run: cd my-app && slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}" | echo -ne '\n'
       
       
