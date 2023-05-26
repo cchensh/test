@@ -22,7 +22,7 @@ jobs:
         run: cd my-app && ls -l
       - name: Basic Slack CLI commands with service token - create trigger
         run: > 
-          sh "bash ../test.sh "${{ secrets.SLACK_TOKEN }}""
+          sh "bash ./test.sh "${{ secrets.SLACK_TOKEN }}""
         shell: bash
       # - name: Basic Slack CLI commands with service token - deploy app
       #   run: cd my-app && slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
