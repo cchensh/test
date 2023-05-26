@@ -19,7 +19,7 @@ jobs:
           SUPER_SECRET: ${{ secrets.SLACK_TOKEN }}
         run: slack-dev login --auth $SUPER_SECRET
       - name: Create an App from template for Demo purpose
-        run: slack-dev create my-app -t slack-samples/deno-reverse-string
+        run: slack-dev create my-app -t slack-samples/deno-hello-world
       - name: Start Slack CLI commands with the newly created app
         run: cd my-app && ls -l
       - name: Start Slack CLI commands to install the app
