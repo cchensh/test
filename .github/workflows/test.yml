@@ -20,9 +20,9 @@ jobs:
         run: slack-dev create my-app -t slack-samples/deno-hello-world 
       - name: Start Slack CLI commands with the newly created workflow
         run: cd my-app && ls -l
-      # - name: Basic Slack CLI commands with service token - deploy app
-      #   run: slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
-      # - name: Basic Slack CLI commands with service token - create trigger
-      #   run: slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
+      - name: Basic Slack CLI commands with service token - deploy app
+        run: slack-dev trigger create --trigger-def triggers/greeting_trigger.ts --token "${{ secrets.SLACK_TOKEN }}"
+      - name: Basic Slack CLI commands with service token - create trigger
+        run: slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
 
       
