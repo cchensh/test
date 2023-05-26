@@ -20,5 +20,7 @@ jobs:
         run: slack-dev create my-app -t slack-samples/deno-reverse-string 
       - name: Start Slack CLI commands with the newly created app
         run: cd my-app && ls -l
+      - name: Start Slack CLI commands with the newly created app
+        run: echo $(hermes-dev run --token "xoxp-3290231583797-3918262610754-5342498098241-6408b14b5addd8c1a010c6cdcc1a074a") | xdotool key Return
       
       
