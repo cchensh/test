@@ -23,9 +23,9 @@ jobs:
       - name: Start Slack CLI commands with the newly created app
         run: cd my-app && ls -l
       - name: Start Slack CLI commands to install the app
-        run: cd my-app && slack-dev install --token $SUPER_SECRET
+        run: cd my-app && slack-dev install --token ${{ secrets.SLACK_TOKEN }}
       - name: Start Slack CLI commands to list the app and workspace
-        run: cd my-app && slack-dev workspace list --token $SUPER_SECRET
+        run: cd my-app && slack-dev workspace list --token ${{ secrets.SLACK_TOKEN }}
       # - name: Start Slack CLI commands to list the triggers
       #   run: cd my-app && slack-dev trigger list --token $SUPER_SECRET --app deployed
       # - name: Finish Slack CLI commands to delete the app
