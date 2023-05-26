@@ -21,8 +21,14 @@ jobs:
       - name: Start Slack CLI commands with the newly created workflow
         run: cd my-app && ls -l
       - name: Basic Slack CLI commands with service token - create trigger
-        run: cd my-app && slack-dev trigger create --trigger-def triggers/greeting_trigger.ts --token "${{ secrets.SLACK_TOKEN }}"
-      - name: Basic Slack CLI commands with service token - deploy app
-        run: cd my-app && slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
+        run: > 
+          cd my-app 
+          slack-dev trigger create --trigger-def triggers/greeting_trigger.ts --token "${{ secrets.SLACK_TOKEN }}"
+          sleep 5s
+          xdotool key Down
+          sleep 1s
+          xdotool key Return 
+      # - name: Basic Slack CLI commands with service token - deploy app
+      #   run: cd my-app && slack-dev deploy --token "${{ secrets.SLACK_TOKEN }}"
 
       
