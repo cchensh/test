@@ -129,7 +129,7 @@ maybe_update_deno_version(){
         current_deno_version=$(deno -V | cut -d " " -f2)
         if version_lt $current_deno_version $MIN_DENO_VERSION; then
                 echo "Deno $current_deno_version was found, but at least $MIN_DENO_VERSION is required."
-                echo -e "⚙️ Visit https://deno.com/manual/getting_started/installation to update Deno\n"
+                echo -e "⛑️ Visit https://deno.com/manual/getting_started/installation to update Deno\n"
         else
                 echo -e "✨ Deno is installed and meets minimum version requirement. Nice!\n"
         fi
