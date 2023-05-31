@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MIN_DENO_VERSION="1.34.0"
+MIN_DENO_VERSION="1.31.1"
 
 install_slack_cli() {
         FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e"    
