@@ -143,6 +143,8 @@ install_deno() {
         #
         if [ $(command -v deno) ]; then
                 maybe_update_deno_version
+        else 
+                echo -e "⛑️ Deno is not found in your system. Visit https://deno.com/manual/getting_started/installation to update Deno\n"
         fi
 }
 
