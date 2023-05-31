@@ -10,23 +10,6 @@ install_slack_cli() {
                 slack_cli_name=${1}
         fi
 
-        
-
-        # Check if slack binary is already in user's system
-        if [ -x "$(command -v $slack_cli_name)" ] ; then
-                echo -e "✅ $slack_cli_name binary is found in the system. Checking if it's the same Slack CLI..."
-                
-                # Check if command is used for Slack CLI, for Slack CLI with version >= 1.18.0, the fingerprint needs to be matched to proceed installation
-                if [[ ! $($slack_cli_name _fingerprint) == $FINGERPRINT ]] &>/dev/null ; then
-
-                        # For Slack CLI with version < 1.18.0, we check with `slack --version` for backwards compatibility  
-                        if [[ ! $($slack_cli_name --version) == *"Using $slack_cli_name v"* ]]; then
-                                echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n See example below: \n\ncurl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
-                                exit 1
-                        fi
-                fi
-        fi
-
         #       
         # Install Slack CLI
         #
@@ -36,27 +19,22 @@ install_slack_cli() {
                 # Using grep and sed to parse the semver (excluding "v" to ensure consistence of binaries' filenames ) instead of jq to avoid extra dependencies requirement
                 #
                 echo -e "\n Finding the latest Slack CLI release version"
-                LATEST_SLACK_CLI_VERSION=$(curl --silent "https://api.slack.com/slackcli/metadata.json" | grep -o '"version": "[^"]*' | grep -o '[^"]*$' | head -1)
+                SLACK_CLI_VERSION=$(curl --silent "https://api.slack.com/slackcli/metadata.json" | grep -o '"version": "[^"]*' | grep -o '[^"]*$' | head -1)
 
-                if [ -z "$LATEST_SLACK_CLI_VERSION" ]; then
+                if [ -z "$SLACK_CLI_VERSION" ]; then
                         echo "Installer cannot find latest Slack CLI release version"
                         exit 1
                 fi
-
-                echo -e "\n👋 Starting to download and install the Slack CLI and its dependencies..."
-                echo -e "\n📦 Installing the Slack CLI\n"
         else
                 while getopts "v:" opt; do
                         case $opt in
                                 v)
-                                        echo -e "\n👋 Starting to download and install the Slack CLI (version: ${OPTARG}) and its dependencies..."
-                                        echo -e "\n📦 Installing the Slack CLI (version: ${OPTARG})\n"
-                                        LATEST_SLACK_CLI_VERSION=${OPTARG}
+                                        SLACK_CLI_VERSION=${OPTARG}                                      
                                         #
                                         # The second positional parameter is the alias of Slack CLI, and 'shift' will simply move to the last argument
                                         #
-                                        if [ $# -gt 2 ]; then
-                                                shift $(($OPTIND - 1))
+                                        shift $(($OPTIND - 1))
+                                        if [ $# -gt 0 ]; then
                                                 slack_cli_name=${1}
                                         fi
                                         ;;
@@ -78,10 +56,28 @@ install_slack_cli() {
                 done
         fi
 
+                # Check if slack binary is already in user's system
+        if [ -x "$(command -v $slack_cli_name)" ] ; then
+                echo -e "✅ $slack_cli_name binary is found in the system. Checking if it's the same Slack CLI..."
+                
+                # Check if command is used for Slack CLI, for Slack CLI with version >= 1.18.0, the fingerprint needs to be matched to proceed installation
+                if [[ ! $($slack_cli_name _fingerprint) == $FINGERPRINT ]] &>/dev/null ; then
+
+                        # For Slack CLI with version < 1.18.0, we check with `slack --version` for backwards compatibility  
+                        if [[ ! $($slack_cli_name --version) == *"Using $slack_cli_name v"* ]]; then
+                                echo -e "✋ We found another $slack_cli_name command in your system, please pass your preferred alias in the install script to avoid name conflicts\n\n See example below: \n\ncurl -fsSL https://downloads.slack-edge.com/slack-cli/install.sh | bash -s your-preferred-alias\n"
+                                exit 1
+                        fi
+                fi
+        fi
+
+        echo -e "\n👋 Starting to download and install the Slack CLI and its dependencies..."
+        echo -e "\n📦 Installing the Slack CLI v$SLACK_CLI_VERSION\n"
+
         if [ "$(uname)" == "Darwin" ]; then
-                slack_cli_url="https://downloads.slack-edge.com/slack-cli/slack_cli_${LATEST_SLACK_CLI_VERSION}_macOS_64-bit.tar.gz"
+                slack_cli_url="https://downloads.slack-edge.com/slack-cli/slack_cli_${SLACK_CLI_VERSION}_macOS_64-bit.tar.gz"
         elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-                slack_cli_url="https://downloads.slack-edge.com/slack-cli/slack_cli_${LATEST_SLACK_CLI_VERSION}_linux_64-bit.tar.gz"
+                slack_cli_url="https://downloads.slack-edge.com/slack-cli/slack_cli_${SLACK_CLI_VERSION}_linux_64-bit.tar.gz"
         else
                 echo "This installer is only supported on Linux and macOS"
                 exit 1
@@ -128,10 +124,11 @@ version_lt() {
 maybe_update_deno_version(){
         current_deno_version=$(deno -V | cut -d " " -f2)
         if version_lt $current_deno_version $MIN_DENO_VERSION; then
-                echo "Deno $current_deno_version was found, but at least $MIN_DENO_VERSION is required."
-                echo -e "⛑️ Visit https://deno.com/manual/getting_started/installation to update Deno\n"
+                echo -e "⚠️ Deno $current_deno_version was found, but at least $MIN_DENO_VERSION is required."
+                echo -e "   To update a previously installed version of Deno, you can run: "
+                echo -e "   deno upgrade "
         else
-                echo -e "✨ Deno is installed and meets minimum version requirement. Nice!\n"
+                echo -e "✨ Deno is installed and meets the minimum version requirement. Nice!\n"
         fi
 }
 
@@ -144,7 +141,8 @@ install_deno() {
         if [ $(command -v deno) ]; then
                 maybe_update_deno_version
         else 
-                echo -e "⛑️ Deno is not found in your system. Visit https://deno.com/manual/getting_started/installation to update Deno\n"
+                echo -e "⚠️ Deno was not found on your system!"
+                echo -e "   Visit https://deno.com/manual/getting_started/installation to install Deno\n"
         fi
 }
 
