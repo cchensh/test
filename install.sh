@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MIN_DENO_VERSION="1.31.3"
+MIN_DENO_VERSION="1.31.1"
 
 install_slack_cli() {
         FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e"    
@@ -149,7 +149,7 @@ install_deno() {
 install_deno_vscode_extension() {
         if [ -f "$(command -v code)" ]; then
                 echo -e "📦 You have Visual Studio Code installed. Run command below to install deno extension to enhance your development experience.\n"
-                echo -e "code --install-extension denoland.vscode-deno"
+                echo -e "   code --install-extension denoland.vscode-deno"
         fi
 }
 
