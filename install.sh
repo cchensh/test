@@ -7,7 +7,7 @@ FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e"
 SLACK_CLI_VERSION=
 rx='^([0-9]+\.){2}(\*|[0-9]+)(-.*)?$'
 
-while getopts "v:d" flag; do
+while getopts "v:i" flag; do
         case "$flag" in
                 v) 
                         if [[ $OPTARG =~ $rx ]]; then
@@ -17,7 +17,7 @@ while getopts "v:d" flag; do
                                 exit 1
                         fi
                         ;;
-                d) 
+                i) 
                         SKIP_DENO_INSTALL=true
                         ;;
         esac
