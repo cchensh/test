@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MIN_DENO_VERSION="1.31.1"
-SKIP_DENO_INSTALL='false'
+SKIP_DENO_INSTALL=false
 SLACK_CLI_NAME="slack"
 FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e" 
 SLACK_CLI_VERSION=
@@ -17,7 +17,7 @@ while getopts "v:s" flag; do
                         fi
                         ;;
                 s) 
-                        SKIP_DENO_INSTALL='true'
+                        SKIP_DENO_INSTALL=true
                         ;;
         esac
 done
@@ -34,7 +34,7 @@ install_slack_cli() {
         #       
         # Install Slack CLI
         #
-        if [ -z "$SLACK_CLI_VERSION"]; then
+        if [ -z "$SLACK_CLI_VERSION" ]; then
                 #
                 # Get the latest published Slack CLI release, the latest release is the most recent non-prerelease, non-draft release, sorted by the created_at attribute.
                 # Using grep and sed to parse the semver (excluding "v" to ensure consistence of binaries' filenames ) instead of jq to avoid extra dependencies requirement
@@ -144,32 +144,38 @@ deno_install_source() {
 maybe_update_deno_version(){
         current_deno_version=$(deno -V | cut -d " " -f2)
         if version_lt $current_deno_version $MIN_DENO_VERSION; then
-                echo "Deno $current_deno_version was found, but at least $MIN_DENO_VERSION is required."
-                install_source=$(deno_install_source)
-                case $install_source in
-                        "brew")
-                                echo "Upgrading Deno using Homebrew..."
-                                brew upgrade deno
-                                ;;
-                        "deno-install-sh")
-                                echo "Upgrading Deno using 'deno upgrade'.."
-                                deno upgrade --version $MIN_DENO_VERSION
-                                ;;
-                        *)
-                                echo "Can't detect how Deno was installed."
-                                echo "We can attempt to run 'deno upgrade' anyway. This may not work if you installed deno via a package manager."
-                                read -p "Run 'deno upgrade'? " yn
-                                case $yn in
-                                        [Yy]*) deno upgrade --version $MIN_DENO_VERSION ;;
-                                        *)
-                                                echo "Please upgrade deno manually to at least $MIN_DENO_VERSION and re-run this script."
-                                                exit
-                                                ;;
-                                esac
-                                ;;
-                esac
+                if [ "$SKIP_DENO_INSTALL" = true ]; then
+                        echo -e "⚠️ Deno $current_deno_version was found, but at least $MIN_DENO_VERSION is required."
+                        echo -e "  To update a previously installed version of Deno, you can run: "
+                        echo -e "    deno upgrade "
+                else
+                        echo "Deno $current_deno_version was found, but at least $MIN_DENO_VERSION is required."
+                        install_source=$(deno_install_source)
+                        case $install_source in
+                                "brew")
+                                        echo "Upgrading Deno using Homebrew..."
+                                        brew upgrade deno
+                                        ;;
+                                "deno-install-sh")
+                                        echo "Upgrading Deno using 'deno upgrade'.."
+                                        deno upgrade --version $MIN_DENO_VERSION
+                                        ;;
+                                *)
+                                        echo "Can't detect how Deno was installed."
+                                        echo "We can attempt to run 'deno upgrade' anyway. This may not work if you installed deno via a package manager."
+                                        read -p "Run 'deno upgrade'? " yn
+                                        case $yn in
+                                                [Yy]*) deno upgrade --version $MIN_DENO_VERSION ;;
+                                                *)
+                                                        echo "Please upgrade deno manually to at least $MIN_DENO_VERSION and re-run this script."
+                                                        exit
+                                                        ;;
+                                        esac
+                                        ;;
+                        esac
+                fi
         else
-                echo -e "✨ Deno is up-to-date. Nice!"
+                echo -e "✨ Deno is installed and meets the minimum version requirement. Nice!\n"
         fi
 }
 
@@ -182,23 +188,28 @@ install_deno() {
         if [ $(command -v deno) ]; then
                 maybe_update_deno_version
         else
-                if [ $(command -v brew) ]; then
-                        echo "Installing Deno using Homebrew..."
-                        brew install deno
+                if [ "$SKIP_DENO_INSTALL" = true ]; then
+                        echo -e "⚠️ Deno was not found on your system!"
+                        echo -e "  Visit https://deno.com/manual/getting_started/installation to install Deno\n"
                 else
-                        if [ ! $(command -v unzip) ]; then
-                                #
-                                # Install dependency: unzip
-                                #
-                                if [ $(command -v apt-get) ]; then
-                                        echo "Installing unzip"
-                                        sudo apt-get install unzip
-                                elif [ $(command -v yum) ]; then
-                                        echo "Installing unzip"
-                                        sudo yum install unzip
+                        if [ $(command -v brew) ]; then
+                                echo "Installing Deno using Homebrew..."
+                                brew install deno
+                        else
+                                if [ ! $(command -v unzip) ]; then
+                                        #
+                                        # Install dependency: unzip
+                                        #
+                                        if [ $(command -v apt-get) ]; then
+                                                echo "Installing unzip"
+                                                sudo apt-get install unzip
+                                        elif [ $(command -v yum) ]; then
+                                                echo "Installing unzip"
+                                                sudo yum install unzip
+                                        fi
                                 fi
+                                curl -fsSL https://deno.land/install.sh | sh -s v$MIN_DENO_VERSION
                         fi
-                        curl -fsSL https://deno.land/install.sh | sh -s v$MIN_DENO_VERSION
                 fi
         fi
 
@@ -222,8 +233,14 @@ install_deno() {
 
 install_deno_vscode_extension() {
         if [ -f "$(command -v code)" ]; then
-                echo -e "📦 You have Visual Studio Code installed. Adding deno extension to enhance your development experience.\n"
-                code --install-extension denoland.vscode-deno
+                if [ "$SKIP_DENO_INSTALL" = true ]; then
+                        echo -e "📦 You have the Visual Studio Code editor installed!"
+	                echo -e "   Install the Deno extension with the following command to enhance your development experience:\n"
+	                echo -e "   code --install-extension denoland.vscode-deno"
+                else
+                        echo -e "📦 You have Visual Studio Code installed. Adding deno extension to enhance your development experience.\n"
+                        code --install-extension denoland.vscode-deno
+                fi
         fi
 }
 
