@@ -6,7 +6,8 @@ SLACK_CLI_NAME="slack"
 FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e" 
 SLACK_CLI_VERSION=
 rx='^([0-9]+\.){2}(\*|[0-9]+)(-.*)?$'
-while getopts "v:s" flag; do
+
+while getopts "v:d" flag; do
         case "$flag" in
                 v) 
                         if [[ $OPTARG =~ $rx ]]; then
@@ -16,7 +17,7 @@ while getopts "v:s" flag; do
                                 exit 1
                         fi
                         ;;
-                s) 
+                d) 
                         SKIP_DENO_INSTALL=true
                         ;;
         esac
@@ -25,10 +26,6 @@ done
 if [ $(( $# - $OPTIND )) -lt 1 ]; then
     SLACK_CLI_NAME=${@:$OPTIND:1}
 fi
-
-# echo "SLACK_CLI_VERSION: $SLACK_CLI_VERSION";
-# echo "SKIP_DENO_INSTALL: $SKIP_DENO_INSTALL";
-# echo "SLACK_CLI_NAME: $SLACK_CLI_NAME";
 
 install_slack_cli() {
         #       
@@ -234,11 +231,12 @@ install_deno() {
 install_deno_vscode_extension() {
         if [ -f "$(command -v code)" ]; then
                 if [ "$SKIP_DENO_INSTALL" = true ]; then
-                        echo -e "📦 You have the Visual Studio Code editor installed!"
+                        echo -e "📦 You have the Visual Studio Code editor installed!\n"
 	                echo -e "   Install the Deno extension with the following command to enhance your development experience:\n"
 	                echo -e "   code --install-extension denoland.vscode-deno"
                 else
-                        echo -e "📦 You have Visual Studio Code installed. Adding deno extension to enhance your development experience.\n"
+                        echo -e "📦 You have the Visual Studio Code editor installed!\n"
+                        echo -e "   Adding deno extension to enhance your development experience.\n"
                         code --install-extension denoland.vscode-deno
                 fi
         fi
