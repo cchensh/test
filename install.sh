@@ -24,7 +24,9 @@ while getopts "v:d" flag; do
 done
 
 if [ $(( $# - $OPTIND )) -lt 1 ]; then
-    SLACK_CLI_NAME=${@:$OPTIND:1}
+    if [ ${@:$OPTIND:1} -ne "" ]; then
+	SLACK_CLI_NAME=${@:$OPTIND:1}
+    fi
 fi
 
 install_slack_cli() {
