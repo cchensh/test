@@ -5,7 +5,7 @@ SKIP_DENO_INSTALL='false'
 SLACK_CLI_NAME="slack"
 FINGERPRINT="d41d8cd98f00b204e9800998ecf8427e" 
 
-while getopts "v:skip-deno-install" flag; do
+while getopts "v::skip-deno-install" flag; do
         case "$flag" in
                 v) 
                         export SLACK_CLI_VERSION=$OPTARG
